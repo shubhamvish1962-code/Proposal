@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Dearest Laddu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ffafbd;
+            --deep-rose: #ffc3a0;
+            --heart-red: #e91e63;
+            --text-dark: #4a4a4a;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-pink), var(--deep-rose));
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.96);
+            padding: 3rem 2rem;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            z-index: 100;
+            max-width: 500px;
+            width: 85%;
+            position: relative;
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .slide.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: var(--heart-red);
+            margin-bottom: 1.5rem;
+        }
+
+        p {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+
+        .next-btn, .back-btn {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            border: none;
+        }
+
+        .next-btn {
+            background-color: var(--heart-red);
+            color: white;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+        }
+
+        .back-btn {
+            background-color: transparent;
+            color: var(--heart-red);
+            border: 2px solid var(--heart-red);
+        }
+
+        .floating-item {
+            position: absolute;
+            bottom: -80px;
+            z-index: 1;
+            pointer-events: none;
+            animation: floatUp linear forwards;
+            color: rgba(233, 30, 99, 0.45);
+            white-space: nowrap;
+        }
+
+        .floating-name {
+            font-family: 'Dancing Script', cursive;
+            font-weight: bold;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.7; }
+            85% { opacity: 0.7; }
+            100% { transform: translateY(-120vh) rotate(30deg); opacity: 0; }
+        }
+
+        #noBtn {
+            background-color: #f1f1f1;
+            color: #888;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="myAudio" loop>
+        <source src="music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="container">
+        
+        <div class="slide active" id="slide1">
+            <h1>Hi Laddu...</h1>
+            <p>I've been thinking a lot about us lately. There's something I've wanted to share with you for a long time, and I wanted to make it as special as you are.</p>
+            <div class="nav-buttons">
+                <button class="next-btn" onclick="startExperience()">Keep Reading ❤️</button>
+            </div>
+        </div>
+
+        <div class="slide" id="slide2">
+            <h1>You Changed My World</h1>
+            <p>Since the moment you walked into my life, Laddu, everything just makes more sense. You've brought a light into my world that I never want to dim.</p>
+            <div class="nav-buttons">
+                <button class="back-btn" onclick="switchSlide(2, 1)">Back</button>
+                <button class="next-btn" onclick="switchSlide(2, 3)">Next ✨</button>
+            </div>
+        </div>
+
+        <div class="slide" id="slide3">
+            <h1>My Safe Place</h1>
+            <p>I love your kindness, your beautiful laugh, and the way you understand me like no one else can. You aren't just my partner, Laddu—you're my best friend.</p>
+            <div class="nav-buttons">
+                <button class="back-btn" onclick="switchSlide(3, 2)">Back</button>
+                <button class="next-btn" onclick="switchSlide(3, 4)">Next 🌸</button>
+            </div>
+        </div>
+
+        <div class="slide" id="slide4">
+            <h1>Our Future</h1>
+            <p>I want to be there for your best days and hold your hand tightly through the hard ones. I want to build a lifetime of beautiful memories with you, Laddu.</p>
+            <div class="nav-buttons">
+                <button class="back-btn" onclick="switchSlide(4, 3)">Back</button>
+                <button class="next-btn" onclick="switchSlide(4, 5)">One Last Thing...</button>
+            </div>
+        </div>
+
+        <div class="slide" id="slide5">
+            <h1>So, Laddu...</h1>
+            <p>Will you make me the happiest person in the world? Will you be mine forever?</p>
+            <div class="nav-buttons">
+                <button id="yesBtn" class="next-btn" onclick="celebrate()">YES!</button>
+                <button id="noBtn" class="back-btn" onmouseover="moveButton()" onclick="moveButton()">No</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const audio = document.getElementById('myAudio');
+
+        function startExperience() {
+            // Start Audio
+            audio.play().catch(e => console.log("Audio play failed. Ensure music.mp3 exists in the same folder."));
+            // Go to next slide
+            switchSlide(1, 2);
+        }
+
+        function createFloatingElement() {
+            const item = document.createElement('div');
+            item.classList.add('floating-item');
+            const isName = Math.random() < 0.35; 
+            
+            if (isName) {
+                item.innerHTML = 'Laddu';
+                item.classList.add('floating-name');
+                item.style.fontSize = Math.random() * 15 + 22 + 'px';
+            } else {
+                const hearts = ['❤️', '💖', '💝', '💕'];
+                item.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                item.style.fontSize = Math.random() * 20 + 12 + 'px';
+            }
+
+            item.style.left = Math.random() * 100 + 'vw';
+            item.style.animationDuration = Math.random() * 4 + 4 + 's'; 
+            document.body.appendChild(item);
+            setTimeout(() => { item.remove(); }, 8000);
+        }
+
+        let spawnInterval = setInterval(createFloatingElement, 180);
+
+        function switchSlide(currentId, targetId) {
+            const currentSlide = document.getElementById('slide' + currentId);
+            const targetSlide = document.getElementById('slide' + targetId);
+            const isGoingForward = targetId > currentId;
+
+            currentSlide.style.opacity = '0';
+            currentSlide.style.transform = isGoingForward ? 'translateY(-20px)' : 'translateY(20px)';
+            
+            setTimeout(() => {
+                currentSlide.classList.remove('active');
+                targetSlide.classList.add('active');
+                targetSlide.style.transform = isGoingForward ? 'translateY(20px)' : 'translateY(-20px)';
+                void targetSlide.offsetWidth;
+                targetSlide.style.opacity = '1';
+                targetSlide.style.transform = 'translateY(0)';
+            }, 400);
+        }
+
+        function moveButton() {
+            const btn = document.getElementById('noBtn');
+            const maxX = window.innerWidth - btn.offsetWidth - 20;
+            const maxY = window.innerHeight - btn.offsetHeight - 20;
+            btn.style.position = 'fixed';
+            btn.style.left = Math.max(10, Math.random() * maxX) + 'px';
+            btn.style.top = Math.max(10, Math.random() * maxY) + 'px';
+        }
+
+        function celebrate() {
+            const container = document.querySelector('.container');
+            container.innerHTML = `
+                <div style="animation: zoomIn 1s ease;">
+                    <h1 style="font-size: 3rem;">I Love You, Laddu! ❤️</h1>
+                    <p>I can't wait to start this beautiful new chapter of our lives together.</p>
+                </div>
+            `;
+            clearInterval(spawnInterval);
+            setInterval(createFloatingElement, 50); 
+        }
+    </script>
+</body>
+</html>
