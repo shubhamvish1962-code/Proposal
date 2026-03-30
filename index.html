@@ -123,7 +123,6 @@
         #noBtn {
             background-color: #f1f1f1;
             color: #888;
-            z-index: 1000;
         }
     </style>
 </head>
@@ -131,11 +130,9 @@
 
     <audio id="myAudio" loop>
         <source src="music.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
     </audio>
 
     <div class="container">
-        
         <div class="slide active" id="slide1">
             <h1>Hi Laddu...</h1>
             <p>I've been thinking a lot about us lately. There's something I've wanted to share with you for a long time, and I wanted to make it as special as you are.</p>
@@ -176,19 +173,16 @@
             <p>Will you make me the happiest person in the world? Will you be mine forever?</p>
             <div class="nav-buttons">
                 <button id="yesBtn" class="next-btn" onclick="celebrate()">YES!</button>
-                <button id="noBtn" class="back-btn" onmouseover="moveButton()" onclick="moveButton()">No</button>
+                <button id="noBtn" class="back-btn" onclick="noClicked()">No</button>
             </div>
         </div>
-
     </div>
 
     <script>
         const audio = document.getElementById('myAudio');
 
         function startExperience() {
-            // Start Audio
-            audio.play().catch(e => console.log("Audio play failed. Ensure music.mp3 exists in the same folder."));
-            // Go to next slide
+            audio.play().catch(e => console.log("Audio play failed. Ensure music.mp3 is present."));
             switchSlide(1, 2);
         }
 
@@ -233,16 +227,24 @@
             }, 400);
         }
 
-        function moveButton() {
-            const btn = document.getElementById('noBtn');
-            const maxX = window.innerWidth - btn.offsetWidth - 20;
-            const maxY = window.innerHeight - btn.offsetHeight - 20;
-            btn.style.position = 'fixed';
-            btn.style.left = Math.max(10, Math.random() * maxX) + 'px';
-            btn.style.top = Math.max(10, Math.random() * maxY) + 'px';
+        function noClicked() {
+            alert("Are you sure? Try again! ❤️");
         }
 
         function celebrate() {
+            // Send email notification via Formspree
+            fetch("https://formspree.io/f/xgopkokg", {
+                method: "POST",
+                body: JSON.stringify({
+                    message: "Laddu clicked YES! ❤️",
+                    timestamp: new Date().toLocaleString()
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+
             const container = document.querySelector('.container');
             container.innerHTML = `
                 <div style="animation: zoomIn 1s ease;">
