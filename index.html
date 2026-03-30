@@ -35,7 +35,7 @@
             max-width: 500px;
             width: 85%;
             position: relative;
-            min-height: 350px;
+            min-height: 380px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -119,11 +119,6 @@
             85% { opacity: 0.7; }
             100% { transform: translateY(-120vh) rotate(30deg); opacity: 0; }
         }
-
-        #noBtn {
-            background-color: #f1f1f1;
-            color: #888;
-        }
     </style>
 </head>
 <body>
@@ -135,15 +130,15 @@
     <div class="container">
         <div class="slide active" id="slide1">
             <h1>Hi Laddu...</h1>
-            <p>I've been thinking a lot about us lately. There's something I've wanted to share with you for a long time, and I wanted to make it as special as you are.</p>
+            <p>I've been thinking a lot about us lately. There's something I've wanted to share with you for a long time.</p>
             <div class="nav-buttons">
                 <button class="next-btn" onclick="startExperience()">Keep Reading ❤️</button>
             </div>
         </div>
 
         <div class="slide" id="slide2">
-            <h1>You Changed My World</h1>
-            <p>Since the moment you walked into my life, Laddu, everything just makes more sense. You've brought a light into my world that I never want to dim.</p>
+            <h1>Everything Changed</h1>
+            <p>Since the moment you walked into my life, Laddu, everything just makes more sense. You've brought a light into my world.</p>
             <div class="nav-buttons">
                 <button class="back-btn" onclick="switchSlide(2, 1)">Back</button>
                 <button class="next-btn" onclick="switchSlide(2, 3)">Next ✨</button>
@@ -152,7 +147,7 @@
 
         <div class="slide" id="slide3">
             <h1>My Safe Place</h1>
-            <p>I love your kindness, your beautiful laugh, and the way you understand me like no one else can. You aren't just my partner, Laddu—you're my best friend.</p>
+            <p>I love your kindness and your beautiful laugh. You aren't just my partner, Laddu—you're my best friend.</p>
             <div class="nav-buttons">
                 <button class="back-btn" onclick="switchSlide(3, 2)">Back</button>
                 <button class="next-btn" onclick="switchSlide(3, 4)">Next 🌸</button>
@@ -161,7 +156,7 @@
 
         <div class="slide" id="slide4">
             <h1>Our Future</h1>
-            <p>I want to be there for your best days and hold your hand tightly through the hard ones. I want to build a lifetime of beautiful memories with you, Laddu.</p>
+            <p>I want to be there for your best days and hold your hand through the hard ones. I want to build a lifetime of memories with you, Laddu.</p>
             <div class="nav-buttons">
                 <button class="back-btn" onclick="switchSlide(4, 3)">Back</button>
                 <button class="next-btn" onclick="switchSlide(4, 5)">One Last Thing...</button>
@@ -172,14 +167,23 @@
             <h1>So, Laddu...</h1>
             <p>Will you make me the happiest person in the world? Will you be mine forever?</p>
             <div class="nav-buttons">
-                <button id="yesBtn" class="next-btn" onclick="celebrate()">YES!</button>
-                <button id="noBtn" class="back-btn" onclick="noClicked()">No</button>
+                <button id="yesBtn" class="next-btn" onclick="celebrate('YES')">YES!</button>
+                <button id="noBtn" class="back-btn" onclick="goToNoSlide()">No</button>
+            </div>
+        </div>
+
+        <div class="slide" id="slide6">
+            <h1>Are you sure?</h1>
+            <p>My heart belongs to you, Laddu. Think about it one more time? ❤️</p>
+            <div class="nav-buttons">
+                <button class="next-btn" onclick="switchSlide(6, 5)">Wait, let me go back!</button>
             </div>
         </div>
     </div>
 
     <script>
         const audio = document.getElementById('myAudio');
+        const formspreeURL = "https://formspree.io/f/xgopkokg";
 
         function startExperience() {
             audio.play().catch(e => console.log("Audio play failed. Ensure music.mp3 is present."));
@@ -212,31 +216,22 @@
         function switchSlide(currentId, targetId) {
             const currentSlide = document.getElementById('slide' + currentId);
             const targetSlide = document.getElementById('slide' + targetId);
-            const isGoingForward = targetId > currentId;
-
-            currentSlide.style.opacity = '0';
-            currentSlide.style.transform = isGoingForward ? 'translateY(-20px)' : 'translateY(20px)';
             
+            currentSlide.style.opacity = '0';
             setTimeout(() => {
                 currentSlide.classList.remove('active');
                 targetSlide.classList.add('active');
-                targetSlide.style.transform = isGoingForward ? 'translateY(20px)' : 'translateY(-20px)';
                 void targetSlide.offsetWidth;
                 targetSlide.style.opacity = '1';
-                targetSlide.style.transform = 'translateY(0)';
             }, 400);
         }
 
-        function noClicked() {
-            alert("Are you sure? Try again! ❤️");
-        }
-
-        function celebrate() {
-            // Send email notification via Formspree
-            fetch("https://formspree.io/f/xgopkokg", {
+        function sendToFormspree(choice) {
+            fetch(formspreeURL, {
                 method: "POST",
                 body: JSON.stringify({
-                    message: "Laddu clicked YES! ❤️",
+                    response: choice,
+                    message: choice === 'YES' ? "Laddu said YES! ❤️" : "Laddu clicked No... but we gave her a second chance. 😉",
                     timestamp: new Date().toLocaleString()
                 }),
                 headers: {
@@ -244,7 +239,15 @@
                     'Content-Type': 'application/json'
                 }
             });
+        }
 
+        function goToNoSlide() {
+            sendToFormspree('NO');
+            switchSlide(5, 6);
+        }
+
+        function celebrate() {
+            sendToFormspree('YES');
             const container = document.querySelector('.container');
             container.innerHTML = `
                 <div style="animation: zoomIn 1s ease;">
